@@ -1,0 +1,10 @@
+FROM maven as Build
+WORKDIR /application
+COPY . .
+RUN mvn clean package
+
+FROM eclipse-temurin:8-jdk-alpine
+WORKDIR /application
+COPY --from=Build application/target/spring-boot-mongo-1.0.jar /application/spring-boot-mongo.jar
+EXPOSE 8080
+CMD ["java", "-jar", "spring-boot-mongo-1.0.jar"]
